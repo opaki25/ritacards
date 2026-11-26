@@ -9,3 +9,7 @@ $('download').onclick=async()=>{try{const url=URL.createObjectURL(await blob());
 if(navigator.canShare){$('share').hidden=false;$('share').onclick=async()=>{try{const file=new File([await blob()],filename(),{type:'image/png'});if(navigator.canShare({files:[file]}))await navigator.share({files:[file],title:'Rita & Shepherd’s Introduction'});else $('status').textContent='Use Download invitation, then share the saved image.'}catch(e){if(e.name!=='AbortError')$('status').textContent='Use Download invitation, then share the saved image.'}}}
 function selectGuest(){ $('name').value=list[index];$('counter').textContent=`Guest ${index+1} of ${list.length}`;$('prev').disabled=index===0;$('next').disabled=index===list.length-1;paint() }
 $('load').onclick=()=>{list=$('guests').value.split(/\r?\n/).map(n=>n.trim().slice(0,100)).filter(Boolean);if(!list.length){$('status').textContent='Add at least one name to the guest list.';return}index=0;$('queue').hidden=false;selectGuest()};$('prev').onclick=()=>{if(index>0){index--;selectGuest()}};$('next').onclick=()=>{if(index<list.length-1){index++;selectGuest()}};
+
+const mobileLayout=window.matchMedia("(max-width:760px)"),preview=document.querySelector(".preview");
+function positionPreview(){if(mobileLayout.matches){$("download").before(preview)}else{document.querySelector("main").append(preview)}}
+mobileLayout.addEventListener("change",positionPreview);positionPreview();
